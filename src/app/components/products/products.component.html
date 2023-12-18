@@ -1,16 +1,46 @@
-<p>
-  La cantidad {{myShopingCart.length}}
-</p>
-<p>
-  Total {{total}}
-</p>
-<p>
-  Today {{today | date }}
-</p>
-<p>
-  Ago:  {{date | timeAgo }}
-</p>
-
+<!--<p>-->
+<!--  La cantidad {{myShopingCart.length}}-->
+<!--</p>-->
+<!--<p>-->
+<!--  Total {{total}}-->
+<!--</p>-->
+<!--<p>-->
+<!--  Today {{today | date }}-->
+<!--</p>-->
+<!--<p>-->
+<!--  Ago:  {{date | timeAgo }}-->
+<!--</p>-->
+<button (click)="toggleProductDetail()">Click</button>
+<button (click)="createNewProduct()">Crear</button>
+<button (click)="onShowDetail('9999')">no found</button>
+<button (click)="readAndupdate('1')">R a U</button>
 <div class="prducts-grid">
-  <app-product (addedProduct)="onAddToShopingCart($event)" *ngFor="let product of products" [product]="product"></app-product>
+  <app-product
+    (addedProduct)="onAddToShopingCart($event)"
+    *ngFor="let product of products"
+    [product]="product"
+    (showProduct)="onShowDetail($event)"
+  >
+
+  </app-product>
+  <button (click)="loadMore()">Load More...</button>
+</div>
+<div class="product-detail" [class.active]="showProductDetail">
+  {{statusDetail}}
+  <div *ngIf="productChose">
+    <button (click)="toggleProductDetail()">close</button>
+    {{productChose.title}}
+    {{productChose.description}}
+    <swiper
+      [slidesPerView]="1"
+
+    >
+      <ng-template swiperSlide *ngFor="let img of productChose.images">
+        <img [src]="img">
+      </ng-template>
+
+    </swiper>
+    <button (click)="updateProduct()">actualizar</button>
+    <button (click)="deletedProduct()">Eliminar</button>
+  </div>
 </div>

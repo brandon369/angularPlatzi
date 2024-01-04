@@ -9,6 +9,7 @@ import {TimeInterceptor} from "./interceptors/time.interceptor";
 import {TokenInterceptor} from "./interceptors/token.interceptor";
 import {HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
 import {NotFoundComponent} from "./website/pages/not-found/not-found.component";
+import {QuicklinkModule} from "ngx-quicklink";
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import {NotFoundComponent} from "./website/pages/not-found/not-found.component";
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    SwiperModule
+    SwiperModule,
+    QuicklinkModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: TimeInterceptor, multi: true},

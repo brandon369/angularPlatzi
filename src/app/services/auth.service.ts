@@ -10,7 +10,7 @@ import {TokenService} from "./token.service";
   providedIn: 'root'
 })
 export class AuthService {
-  private API = `${environment.API_URL}/api/auth`
+  private API = `${environment.API_URL}/auth`
 
   constructor(
     private http: HttpClient,

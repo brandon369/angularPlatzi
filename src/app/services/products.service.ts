@@ -12,7 +12,7 @@ import {checkTime} from "../interceptors/time.interceptor";
 })
 export class ProductsService {
 
-  private API = `${environment.API_URL}/api/products`
+  private API = `${environment.API_URL}`
 
   // private API = 'https://api.escuelajs.co/api/v1/products'
 
@@ -26,7 +26,7 @@ export class ProductsService {
     if (limit != null && offset != null) {
       params = params.set('limit', limit)
       params = params.set('offset', offset)
-      return this.http.get<Product[]>(this.API, {params})
+      return this.http.get<Product[]>(`${this.API}/products`, {params})
         .pipe(
           retry(3),
           map(data => data.map(item => {
@@ -37,7 +37,7 @@ export class ProductsService {
           }))
         )
     } else {
-      return this.http.get<Product[]>(this.API)
+      return this.http.get<Product[]>(`${this.API}/products`)
         .pipe(
           retry(3)
         )
@@ -48,7 +48,7 @@ export class ProductsService {
   }
 
   getProduct(id: string) {
-    return this.http.get<Product>(`${this.API}/${id}`)
+    return this.http.get<Product>(`${this.API}/products/${id}`)
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.InternalServerError) {
@@ -70,16 +70,28 @@ export class ProductsService {
   }
 
   create(data: CreateProductDTO) {
-    return this.http.post<Product>(this.API, data, {context: checkTime()})
+    return this.http.post<Product>(`${this.API}/products`, data, {context: checkTime()})
   }
 
   update(id: string, data: UpdateProductDTO) {
-    return this.http.put<Product>(`${this.API}/${id}`, data)
+    return this.http.put<Product>(`${this.API}/products/${id}`, data)
 
   }
 
   delete(id: string) {
-    return this.http.delete<boolean>(`${this.API}/${id}`,)
+    return this.http.delete<boolean>(`${this.API}/products/${id}`,)
+
+  }
+
+  getByCategory(categoryId: string, limit?: number, offset?: number) {
+    let params = new HttpParams()
+    if (limit != null && offset != null) {
+      params = params.set('limit', limit)
+      params = params.set('offset', offset)
+    }
+
+    return this.http.get<Product[]>(`${this.API}/categories/${categoryId}/products`, {params})
+
 
   }
 

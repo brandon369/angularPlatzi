@@ -11,6 +11,7 @@ import {ProfileComponent} from './website/pages/profile/profile.component';
 import {ProductDetailComponent} from "./website/pages/product-detail/product-detail.component";
 import {LayoutComponent} from "./website/components/layout/layout.component";
 import {CustomPreloadService} from "./services/custom-preload.service";
+import {AdminGuard} from "./guards/admin.guard";
 // import {QuicklinkStrategy} from "ngx-quicklink";
 
 const routes: Routes = [
@@ -21,6 +22,7 @@ const routes: Routes = [
   {
     path: 'cms',
     loadChildren: () => import('./cms/cms.module').then(m => m.CmsModule),
+    canActivate: [AdminGuard]
     // data: {
     //   preload: true
     // }

@@ -3,14 +3,18 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Auth} from "../models/auth.model";
 import {User} from "../models/users.model";
-import {tap} from "rxjs/operators";
+import {switchMap, tap} from "rxjs/operators";
 import {TokenService} from "./token.service";
+import {BehaviorSubject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private API = `${environment.API_URL}/auth`
+
+  private user = new BehaviorSubject<User | null>(null)
+  user$ = this.user.asObservable()
 
   constructor(
     private http: HttpClient,
@@ -34,8 +38,26 @@ export class AuthService {
     //   headers
     // })
     return this.http.get<User>(`${this.API}/profile`)
+      .pipe(
+        tap(user => {
+          this.user.next(user)
+        })
+      )
 
   }
 
+
+  loginAndGet(email: string, password: string) {
+    return this.login(email, password)
+      .pipe(
+        switchMap(() => this.profile()),
+      )
+  }
+
+
+  logout() {
+
+    this.tokenService.removeToken();
+  }
 
 }

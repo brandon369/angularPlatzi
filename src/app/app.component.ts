@@ -1,7 +1,8 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UsersService} from "./services/users.service";
 import {AuthService} from "./services/auth.service";
 import {switchMap} from "rxjs/operators";
+import {TokenService} from "./services/token.service";
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,15 @@ export class AppComponent {
   constructor(
     private userService: UsersService,
     private authService: AuthService,
+    private tokenService: TokenService,
   ) {
+  }
+
+  ngOnInit(){
+    const token = this.tokenService.getToken()
+    if(token){
+      this.authService.profile().subscribe()
+    }
   }
 
   // onLoaded(e: string) {
@@ -28,14 +37,14 @@ export class AppComponent {
   // }
 
   createUser() {
-    this.userService.create({name: 'hola c', email: 'h@mail.com', password: '123'})
+    this.userService.create({name: 'hola c', email: 'h@mail.com', password: '123asdf123', avatar: 'https://imgur.com/R2PN9Wq'})
       .subscribe(rta => {
         console.log(rta)
       })
   }
 
   login() {
-    this.authService.login('h@mail.com', '123')
+    this.authService.login('h@mail.com', '123asdf123')
       .subscribe(rta => {
         this.token = rta.access_token
       })
